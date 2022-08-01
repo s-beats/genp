@@ -7,6 +7,18 @@ import (
 	"text/template"
 )
 
+type MethodDefinition struct {
+	Name    string
+	Args    []string
+	Returns []string
+}
+
+type Definition struct {
+	Interface string
+	Methods   []*MethodDefinition
+	Implement string
+}
+
 func main() {
 	tpl, err := template.ParseFiles("test.tmpl")
 	if err != nil {
