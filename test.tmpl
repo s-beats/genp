@@ -1,2 +1,7 @@
-{{.Name}}
-{{.Age}}
+package main
+
+type {{.Interface}} interface {
+{{range .Methods}}
+    {{.Name}}({{range $i, $e := .Args}}{{ if $i }}, {{ end }}{{$e.Name}} {{$e.Type}}{{end}}) ({{range $i,$e := .Returns}}{{ if $i }}, {{ end }}{{$e.Type}}{{end}})
+{{end}}
+}

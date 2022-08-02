@@ -7,10 +7,19 @@ import (
 	"text/template"
 )
 
+type Arg struct {
+	Name string
+	Type string
+}
+
+type Return struct {
+	Type string
+}
+
 type MethodDefinition struct {
 	Name    string
-	Args    []string
-	Returns []string
+	Args    []*Arg
+	Returns []*Return
 }
 
 type Definition struct {
@@ -25,14 +34,21 @@ func main() {
 		log.Fatal("Failed to generate template: ", err)
 	}
 
-	m := map[string]interface{}{
-		"Name": "test",
-		"Age":  30,
+	def := &Definition{
+		Interface: "User",
+		Methods: []*MethodDefinition{
+			{
+				Name:    "Create",
+				Args:    []*Arg{{"name", "string"}},
+				Returns: []*Return{{"error"}},
+			},
+		},
+		Implement: "User",
 	}
 
 	buf := bytes.NewBuffer(nil)
 
-	if err := tpl.Execute(buf, m); err != nil {
+	if err := tpl.Execute(buf, def); err != nil {
 		log.Fatal("Failed to execute template: ", err)
 	}
 	ioutil.WriteFile("test.go", buf.Bytes(), 0644)
