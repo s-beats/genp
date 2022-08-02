@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"go/format"
 	"io/ioutil"
 	"log"
 	"text/template"
@@ -51,5 +52,11 @@ func main() {
 	if err := tpl.Execute(buf, def); err != nil {
 		log.Fatal("Failed to execute template: ", err)
 	}
-	ioutil.WriteFile("test.go", buf.Bytes(), 0644)
+
+	bytes, err := format.Source(buf.Bytes())
+	if err != nil {
+		log.Fatal("Failed to format source: ", err)
+	}
+
+	ioutil.WriteFile("test.go", bytes, 0644)
 }
