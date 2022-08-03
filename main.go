@@ -2,10 +2,11 @@ package main
 
 import (
 	"bytes"
-	"go/format"
 	"io/ioutil"
 	"log"
 	"text/template"
+
+	"golang.org/x/tools/imports"
 
 	"github.com/s-beats/genp/internal"
 )
@@ -21,10 +22,16 @@ func main() {
 		Methods: []*internal.MethodDefinition{
 			{
 				Name: "Create",
-				Args: []*internal.Arg{{
-					Name: "name",
-					Type: "string",
-				}},
+				Args: []*internal.Arg{
+					{
+						Name: "name",
+						Type: "string",
+					},
+					{
+						Name: "endedAt",
+						Type: "time.Time",
+					},
+				},
 				Returns: []*internal.Return{{
 					Type: "error",
 				}},
@@ -39,10 +46,12 @@ func main() {
 		log.Fatal("Failed to execute template: ", err)
 	}
 
-	bytes, err := format.Source(buf.Bytes())
+	bytes, err := imports.Process("", buf.Bytes(), nil)
 	if err != nil {
-		log.Fatal("Failed to format source: ", err)
+		log.Fatal("Failed to format and adjust imports source: ", err)
 	}
 
 	ioutil.WriteFile("test.go", bytes, 0644)
 }
+
+var _ = imports.Options{}
