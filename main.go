@@ -6,28 +6,9 @@ import (
 	"io/ioutil"
 	"log"
 	"text/template"
+
+	"github.com/s-beats/genp/internal"
 )
-
-type Arg struct {
-	Name string
-	Type string
-}
-
-type Return struct {
-	Type string
-}
-
-type MethodDefinition struct {
-	Name    string
-	Args    []*Arg
-	Returns []*Return
-}
-
-type Definition struct {
-	Interface string
-	Methods   []*MethodDefinition
-	Implement string
-}
 
 func main() {
 	tpl, err := template.ParseFiles("test.tmpl")
@@ -35,13 +16,18 @@ func main() {
 		log.Fatal("Failed to generate template: ", err)
 	}
 
-	def := &Definition{
+	def := &internal.Definition{
 		Interface: "User",
-		Methods: []*MethodDefinition{
+		Methods: []*internal.MethodDefinition{
 			{
-				Name:    "Create",
-				Args:    []*Arg{{"name", "string"}},
-				Returns: []*Return{{"error"}},
+				Name: "Create",
+				Args: []*internal.Arg{{
+					Name: "name",
+					Type: "string",
+				}},
+				Returns: []*internal.Return{{
+					Type: "error",
+				}},
 			},
 		},
 		Implement: "user",
