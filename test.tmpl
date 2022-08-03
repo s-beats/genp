@@ -5,3 +5,12 @@ type {{.Interface}} interface {
     {{.Name}}({{range $i, $e := .Args}}{{ if $i }}, {{ end }}{{$e.Name}} {{$e.Type}}{{end}}) ({{range $i,$e := .Returns}}{{ if $i }}, {{ end }}{{$e.Type}}{{end}})
 {{end}}
 }
+
+{{$impl := .Implement}}
+type {{$impl}} struct {}
+
+{{range .Methods}}
+func (self *{{$impl}}) {{.Name}}({{range $i, $e := .Args}}{{ if $i }}, {{ end }}{{$e.Name}} {{$e.Type}}{{end}}) ({{range $i,$e := .Returns}}{{ if $i }}, {{ end }}{{$e.Type}}{{end}}) {
+    panic("not implemented")
+}
+{{end}}

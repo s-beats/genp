@@ -44,7 +44,7 @@ func main() {
 				Returns: []*Return{{"error"}},
 			},
 		},
-		Implement: "User",
+		Implement: "user",
 	}
 
 	buf := bytes.NewBuffer(nil)
